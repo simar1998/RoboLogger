@@ -2,16 +2,10 @@ package com.vyo.robologger.main;
 
 import com.google.gson.Gson;
 import com.vyo.robologger.main.boot.BootConfig;
-import com.vyo.robologger.main.db.DatabaseHelper;
 import com.vyo.robologger.main.db.DatabaseInit;
-import com.vyo.robologger.main.links.LinkExtractor;
-import com.vyo.robologger.main.links.LinkSearch;
-import com.vyo.robologger.main.url.IndexedURLWrapper;
-import com.vyo.robologger.main.url.UrlConstructor;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 //TODO create code for clean boot is necessary or remove the boot behaviour if deemed proper.
 /**
  * Main program entry point
