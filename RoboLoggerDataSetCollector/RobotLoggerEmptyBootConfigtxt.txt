@@ -1,0 +1,1 @@
+{"TBA_KEY":"tbakeyhere","DOWNLOAD_LOCATION":"downloadlocationhere","MYSQL_URL":"mysqlurl","MYSQL_USR":"mysqlusrhere","MYSQL_PASSWD":"mysqlpasswd","bootBehaviour":"update_boot"}

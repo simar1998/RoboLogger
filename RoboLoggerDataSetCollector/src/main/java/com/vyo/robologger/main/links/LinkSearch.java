@@ -1,8 +1,11 @@
-package com.vyo.robologger.main;
+package com.vyo.robologger.main.links;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Takes list of link string objects and filters results to links containing keyword submitted through constructor.
+ */
 public class LinkSearch {
 
     private LinkExtractor linkExtractor;

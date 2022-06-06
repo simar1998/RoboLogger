@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="RoboLoggerDataSetCollector" target="15" />
+      <module name="RoboLoggerDataSetCollector" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

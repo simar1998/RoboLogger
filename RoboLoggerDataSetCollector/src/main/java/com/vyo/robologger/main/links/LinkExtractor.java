@@ -1,4 +1,4 @@
-package com.vyo.robologger.main;
+package com.vyo.robologger.main.links;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +8,9 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Iteratively searches through html file for DOM objects for href tags then invokes Link Search to filter results to link that have pic host domain e.g. imgur
+ */
 public class LinkExtractor {
 
     String url;
