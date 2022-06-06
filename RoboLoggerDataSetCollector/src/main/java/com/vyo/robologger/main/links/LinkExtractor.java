@@ -27,7 +27,7 @@ public class LinkExtractor {
         this.url = url;
     }
 
-    public void extractLinks() throws IOException {
+    public LinkExtractor extractLinks() throws IOException {
         print("Fetching %s...", url);
 
         doc = Jsoup.connect(url).get();
@@ -60,6 +60,8 @@ public class LinkExtractor {
         allLinks.addAll(mediaLinks);
         allLinks.addAll(importLinks);
         allLinks.addAll(this.links);
+
+        return this;
     }
 
     private static void print(String msg,ArrayList<String> list, Object... args) {

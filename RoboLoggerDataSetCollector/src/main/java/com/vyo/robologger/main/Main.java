@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 import com.vyo.robologger.main.boot.BootConfig;
 import com.vyo.robologger.main.links.LinkExtractor;
 import com.vyo.robologger.main.links.LinkSearch;
+import com.vyo.robologger.main.url.IndexedURLWrapper;
 import com.vyo.robologger.main.url.UrlConstructor;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+//TODO create code for clean boot is necessary or remove the boot behaviour if deemed proper.
 /**
  * Main program entry point
  */
@@ -23,31 +24,10 @@ public class Main {
 
        bootConfigLoad(args[1]);
 
-       extractImgurLinks();
+        CollectResources collectResources = new CollectResources();
+        collectResources.startCollection();
     }
 
-    private static void extractImgurLinks(){
-        //Construct valid urls
-        UrlConstructor urlConstructor = new UrlConstructor();
-        urlConstructor.constructAllURL();
-
-        //Append valid urls to linkExtractor list
-        ArrayList<LinkExtractor> linkExtractors = new ArrayList<>();
-        for (String link: urlConstructor.getIndexedSearchURIs()){
-            linkExtractors.add(new LinkExtractor(link));
-        }
-
-        //Init Imgur Link Search on individual submitted urls
-        //TODO add image file download to location and append information to ImageData hibernate entity
-        for (LinkExtractor linkExtractor : linkExtractors){
-            LinkSearch linkSearch = new LinkSearch(linkExtractor,"imgur","jpg");
-            linkSearch.search();
-            for (String imgurLink :  linkSearch.getSearchResults()){
-                //TODO Hibernate and download code here
-            }
-        }
-
-    }
 
     /**
      * Loads the boot config

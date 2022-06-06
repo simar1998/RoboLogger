@@ -18,7 +18,7 @@ public class UrlConstructor {
     private String allTeamsStr;
     private ArrayList<TeamJsonWrapper> teams = new ArrayList<>();
 
-    private ArrayList<String> indexedSearchURIs = new ArrayList<>();
+    private ArrayList<IndexedURLWrapper> indexedSearchURIs = new ArrayList<>();
 
     private final String TBA_BASE_CONSTRUCT_URL = "https://www.thebluealliance.com/team/";
     /**
@@ -72,13 +72,25 @@ public class UrlConstructor {
             int rokYear = teamJsonWrapper.getTeamJsonObject().getInt("rookie_year");
             for (int i = rokYear; i < Calendar.getInstance().get(Calendar.YEAR);i++){
                 if (validateURL(TBA_BASE_CONSTRUCT_URL+"/"+team+"/"+i)){
-                    indexedSearchURIs.add(TBA_BASE_CONSTRUCT_URL+"/"+team+"/"+i);
+                    indexedSearchURIs.add(new IndexedURLWrapper(team,TBA_BASE_CONSTRUCT_URL+"/"+team+"/"+i));
                 }
             }
         }
     }
 
-    public ArrayList<String> getIndexedSearchURIs() {
+    /**
+     * Returns all the validated urls where search will should be done
+     * @return
+     */
+    public ArrayList<IndexedURLWrapper> getIndexedSearchURIs() {
         return indexedSearchURIs;
+    }
+
+    /**
+     * Returns the json wrapper list
+     * @return
+     */
+    public ArrayList<TeamJsonWrapper> getTeams() {
+        return teams;
     }
 }
