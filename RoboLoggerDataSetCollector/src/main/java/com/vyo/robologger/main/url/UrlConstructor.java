@@ -12,6 +12,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -62,10 +65,23 @@ public class UrlConstructor {
      * @param url
      * @return
      */
-    private boolean validateURL(String url){
-        UrlValidator urlValidator = new UrlValidator();
-        System.out.println("Validator " + urlValidator.isValid(url) + " url "+ url );
-        return urlValidator.isValid(url);
+    private boolean validateURL(String url) throws IOException {
+        URL urlObj = new URL(url);
+        HttpURLConnection huc = null;
+        try {
+            huc = (HttpURLConnection) urlObj.openConnection();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(huc.getResponseCode());
+        if(HttpURLConnection.HTTP_OK == huc.getResponseCode()){
+            System.out.println("URL:"+url+"  is valid");
+            return true;
+        }
+
+        System.out.println("Invalid url URL:" + url);
+        return false;
     }
 
     /**
@@ -88,7 +104,7 @@ public class UrlConstructor {
                         int rokYear = Integer.parseInt(rokYearStr);
                         for (int i = rokYear; i < Calendar.getInstance().get(Calendar.YEAR); i++) {
                             //System.out.println("Validating URL "+ TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i);
-                            if (validateURL(TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i)) {
+                            if (validateURL(TBA_BASE_CONSTRUCT_URL + team + "/" + i)) {
                                 System.out.println("Link validated");
                                 indexedSearchURIs.add(new IndexedURLWrapper(team, TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i));
                             }
