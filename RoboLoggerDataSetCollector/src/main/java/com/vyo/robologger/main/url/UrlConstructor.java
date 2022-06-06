@@ -1,12 +1,17 @@
 package com.vyo.robologger.main.url;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.vyo.robologger.main.Main;
 import okhttp3.*;
+
 import org.apache.commons.validator.UrlValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -31,7 +36,7 @@ public class UrlConstructor {
 
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonobject = jsonArray.getJSONObject(i);
-            teams.add(new TeamJsonWrapper(jsonobject.getString("team_number"),jsonobject));
+            teams.add(new TeamJsonWrapper(jsonobject.getInt("team_number")+"",jsonobject));
         }
     }
 
@@ -39,18 +44,17 @@ public class UrlConstructor {
      * Gets the response string for all teams
      * @throws IOException
      */
-    private void getAllTeams() throws IOException {
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
-        Request request = new Request.Builder()
-                .url("https://www.thebluealliance.com/api/v3/teams/all")
-                .method("GET", body)
-                .addHeader("X-TBA-Auth-Key", Main.bootConfig.getTBA_KEY())
-                .build();
-        Response response = client.newCall(request).execute();
-        this.allTeamsStr = response.toString();
+    private void getAllTeams() throws IOException, UnirestException {
+
+        Unirest.setTimeouts(0, 0);
+        HttpResponse<String> response = Unirest.get("https://www.thebluealliance.com/api/v3/teams/all")
+                .header("X-TBA-Auth-Key", Main.bootConfig.getTBA_KEY())
+                .asString();
+
+
+        String responseStr = response.getBody();
+        System.out.println(responseStr);
+        this.allTeamsStr = responseStr;
     }
 
     /**
@@ -60,6 +64,7 @@ public class UrlConstructor {
      */
     private boolean validateURL(String url){
         UrlValidator urlValidator = new UrlValidator();
+        System.out.println("Validator " + urlValidator.isValid(url) + " url "+ url );
         return urlValidator.isValid(url);
     }
 
@@ -67,14 +72,34 @@ public class UrlConstructor {
      * Method constructs all the urls the link extractor will search
      */
     public void constructAllURL(){
-        for (TeamJsonWrapper teamJsonWrapper : this.teams){
-            String team = teamJsonWrapper.getTeamNum();
-            int rokYear = teamJsonWrapper.getTeamJsonObject().getInt("rookie_year");
-            for (int i = rokYear; i < Calendar.getInstance().get(Calendar.YEAR);i++){
-                if (validateURL(TBA_BASE_CONSTRUCT_URL+"/"+team+"/"+i)){
-                    indexedSearchURIs.add(new IndexedURLWrapper(team,TBA_BASE_CONSTRUCT_URL+"/"+team+"/"+i));
+        try {
+            getAllTeams();
+            extractTeams();
+        } catch (IOException | UnirestException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            for (TeamJsonWrapper teamJsonWrapper : this.teams) {
+                String team = teamJsonWrapper.getTeamNum();
+                String rokYearStr = teamJsonWrapper.getTeamJsonObject().get("rookie_year").toString();
+                try {
+                    if (rokYearStr != null) {
+                        int rokYear = Integer.parseInt(rokYearStr);
+                        for (int i = rokYear; i < Calendar.getInstance().get(Calendar.YEAR); i++) {
+                            //System.out.println("Validating URL "+ TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i);
+                            if (validateURL(TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i)) {
+                                System.out.println("Link validated");
+                                indexedSearchURIs.add(new IndexedURLWrapper(team, TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i));
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                   // e.printStackTrace();
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

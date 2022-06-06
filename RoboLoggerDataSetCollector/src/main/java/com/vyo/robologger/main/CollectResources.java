@@ -20,6 +20,7 @@ public class CollectResources {
      * Starts collection
      */
     public void startCollection(){
+        System.out.println("Starting collection");
         try {
             extractImgurLinks();
         } catch (IOException e) {

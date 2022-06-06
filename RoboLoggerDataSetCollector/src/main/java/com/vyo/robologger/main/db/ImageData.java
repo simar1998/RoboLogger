@@ -1,13 +1,16 @@
 package com.vyo.robologger.main.db;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Dataset raw data
  */
 @Entity
+@Table(name = "ImageData")
 public class ImageData {
 
     @Id

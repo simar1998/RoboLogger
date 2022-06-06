@@ -1,8 +1,5 @@
 package com.vyo.robologger.main.db;
 
-
-
-
 import com.vyo.robologger.main.Main;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
