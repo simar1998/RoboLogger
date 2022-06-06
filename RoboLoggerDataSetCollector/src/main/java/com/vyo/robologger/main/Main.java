@@ -2,6 +2,8 @@ package com.vyo.robologger.main;
 
 import com.google.gson.Gson;
 import com.vyo.robologger.main.boot.BootConfig;
+import com.vyo.robologger.main.db.DatabaseHelper;
+import com.vyo.robologger.main.db.DatabaseInit;
 import com.vyo.robologger.main.links.LinkExtractor;
 import com.vyo.robologger.main.links.LinkSearch;
 import com.vyo.robologger.main.url.IndexedURLWrapper;
@@ -20,10 +22,15 @@ public class Main {
     public static BootConfig bootConfig;
     public static void main(String... args) throws IOException {
 
-       assert args.length > 0 : "Boot Config file path argument not submitted, Can not continue!";
+        assert args.length > 0 : "Boot Config file path argument not submitted, Can not continue!";
 
-       bootConfigLoad(args[1]);
+        //Loads config vars
+        bootConfigLoad(args[1]);
 
+        //Inits Database
+        DatabaseInit.buildSessionFactory();
+
+        //Inits resource collection and database reference building
         CollectResources collectResources = new CollectResources();
         collectResources.startCollection();
     }
