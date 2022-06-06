@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Helper class consists of static references of methods commonly used enough times to not deem their own class
+ * Helper class consists of static references of methods commonly used enough times but do not really require their own class
  */
 public class Helper {
 
