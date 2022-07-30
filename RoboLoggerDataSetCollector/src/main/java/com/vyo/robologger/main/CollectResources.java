@@ -68,6 +68,7 @@ public class CollectResources {
         UrlConstructor urlConstructor = new UrlConstructor();
         urlConstructor.constructAllURL();
 
+
         //Append valid urls to linkExtractor list
         for (IndexedURLWrapper link: urlConstructor.getIndexedSearchURIs()){
             link.setLinkExtractor(new LinkExtractor(link.getUrl()).extractLinks());

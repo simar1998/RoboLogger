@@ -14,7 +14,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Stack;
 
+//TODO make a implementation of stack queue here
 /**
  * This class constructs the URL strings that are to be submitted to LinkExtractor and LinkSearch by The Blue Alliance API Invocation
  */
@@ -24,6 +26,9 @@ public class UrlConstructor {
     private ArrayList<TeamJsonWrapper> teams = new ArrayList<>();
 
     private ArrayList<IndexedURLWrapper> indexedSearchURIs = new ArrayList<>();
+
+    Stack<IndexedURLWrapper> linkStack = new Stack();
+
 
     private final String TBA_BASE_CONSTRUCT_URL = "https://www.thebluealliance.com/team/";
     /**
@@ -57,29 +62,6 @@ public class UrlConstructor {
         this.allTeamsStr = responseStr;
     }
 
-    /**
-     * Method validates a provided URL and returns whether it exists.
-     * @param url
-     * @return
-     */
-    private boolean validateURL(String url) throws IOException {
-        URL urlObj = new URL(url);
-        HttpURLConnection huc = null;
-        try {
-            huc = (HttpURLConnection) urlObj.openConnection();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println(huc.getResponseCode());
-        if(HttpURLConnection.HTTP_OK == huc.getResponseCode()){
-            System.out.println("URL:"+url+"  is valid");
-            return true;
-        }
-
-        System.out.println("Invalid url URL:" + url);
-        return false;
-    }
 
     /**
      * Method constructs all the urls the link extractor will search
@@ -101,10 +83,7 @@ public class UrlConstructor {
                         int rokYear = Integer.parseInt(rokYearStr);
                         for (int i = rokYear; i < Calendar.getInstance().get(Calendar.YEAR); i++) {
                             //System.out.println("Validating URL "+ TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i);
-                            if (validateURL(TBA_BASE_CONSTRUCT_URL + team + "/" + i)) {
-                                System.out.println("Link validated");
-                                indexedSearchURIs.add(new IndexedURLWrapper(team, TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i));
-                            }
+                            indexedSearchURIs.add(new IndexedURLWrapper(team, TBA_BASE_CONSTRUCT_URL + "/" + team + "/" + i));
                         }
                     }
                 }catch (Exception e){

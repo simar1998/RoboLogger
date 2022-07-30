@@ -22,46 +22,57 @@ public class LinkExtractor {
 
     Document doc;
 
+    boolean isUrlValid = false;
+
 
     public LinkExtractor(String url){
         this.url = url;
     }
 
     public LinkExtractor extractLinks() throws IOException {
-        print("Fetching %s...", url);
+       try{
+           print("Fetching %s...", url);
 
-        doc = Jsoup.connect(url).get();
-        Elements links = doc.select("a[href]");
-        Elements media = doc.select("[src]");
-        Elements imports = doc.select("link[href]");
+           doc = Jsoup.connect(url).get();
 
-        print("\nMedia: (%d)", media.size());
-        for (Element src : media) {
-            if (src.normalName().equals("img"))
-                print(" * %s: <%s> %sx%s (%s)",mediaLinks,
-                        src.tagName(), src.attr("abs:src"), src.attr("width"), src.attr("height"),
-                        trim(src.attr("alt"), 20));
-            else
-                print(" * %s: <%s>",mediaLinks, src.tagName(), src.attr("abs:src"));
-        }
+           isUrlValid = true;
+           Elements links = doc.select("a[href]");
+           Elements media = doc.select("[src]");
+           Elements imports = doc.select("link[href]");
 
-        print("\nImports: (%d)", imports.size());
-        for (Element link : imports) {
-            print(" * %s <%s> (%s)",importLinks, link.tagName(),link.attr("abs:href"), link.attr("rel"));
-        }
+           print("\nMedia: (%d)", media.size());
+           for (Element src : media) {
+               if (src.normalName().equals("img"))
+                   print(" * %s: <%s> %sx%s (%s)",mediaLinks,
+                           src.tagName(), src.attr("abs:src"), src.attr("width"), src.attr("height"),
+                           trim(src.attr("alt"), 20));
+               else
+                   print(" * %s: <%s>",mediaLinks, src.tagName(), src.attr("abs:src"));
+           }
 
-        print("\nLinks: (%d)", links.size());
-        for (Element link : links) {
-            print(" * a: <%s>  (%s)", this.links, link.attr("abs:href"), trim(link.text(), 35));
-        }
+           print("\nImports: (%d)", imports.size());
+           for (Element link : imports) {
+               print(" * %s <%s> (%s)",importLinks, link.tagName(),link.attr("abs:href"), link.attr("rel"));
+           }
 
-        System.out.println("Appending all links to one collection");
+           print("\nLinks: (%d)", links.size());
+           for (Element link : links) {
+               print(" * a: <%s>  (%s)", this.links, link.attr("abs:href"), trim(link.text(), 35));
+           }
 
-        allLinks.addAll(mediaLinks);
-        allLinks.addAll(importLinks);
-        allLinks.addAll(this.links);
+           System.out.println("Appending all links to one collection");
 
-        return this;
+           allLinks.addAll(mediaLinks);
+           allLinks.addAll(importLinks);
+           allLinks.addAll(this.links);
+
+           return this;
+       }
+       catch (Exception e) {
+           e.printStackTrace();
+           isUrlValid = false;
+       }
+       return null;
     }
 
     private static void print(String msg,ArrayList<String> list, Object... args) {
