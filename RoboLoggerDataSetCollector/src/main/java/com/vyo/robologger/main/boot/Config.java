@@ -1,12 +1,11 @@
 package com.vyo.robologger.main.boot;
 
-import com.google.gson.Gson;
 /**
  * Boot file object stores useful program variables
  */
 import java.io.File;
 
-public class BootConfig {
+public class Config {
 
     private String TBA_KEY;
 
@@ -21,7 +20,7 @@ public class BootConfig {
     private BootBehaviour bootBehaviour;
 
 
-    public BootConfig() {
+    public Config() {
 
     }
 
@@ -73,7 +72,7 @@ public class BootConfig {
         return bootBehaviour;
     }
 
-    public BootConfig rectifyDownloadLocationStr(){
+    public Config rectifyDownloadLocationStr(){
         if (this.DOWNLOAD_LOCATION.toCharArray()[this.DOWNLOAD_LOCATION.length()-1] != File.separatorChar){
             this.DOWNLOAD_LOCATION = this.DOWNLOAD_LOCATION+File.separator;
         }

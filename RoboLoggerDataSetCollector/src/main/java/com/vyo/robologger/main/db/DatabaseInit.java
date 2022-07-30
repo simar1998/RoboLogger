@@ -24,6 +24,7 @@ public class DatabaseInit {
     //Classes to add to the annoted list for the database
     static {
         managedEntities.add(ImageData.class);
+        managedEntities.add(ProcessingProgress.class);
     }
 
     /**
@@ -53,10 +54,10 @@ public class DatabaseInit {
             System.out.println("Session factory built, hibernate thread");
             configuration = new Configuration()
 //                    .setProperty("hibernate.connection.url", System.getenv("MYSQL_URL"))
-                    .setProperty("hibernate.connection.url", Main.bootConfig.getMYSQL_URL())
+                    .setProperty("hibernate.connection.url", Main.config.getMYSQL_URL())
                     .setProperty("hibernate.connection.driver_class", DRIVER_STRING)
-                    .setProperty("hibernate.connection.username", Main.bootConfig.getMYSQL_USR())
-                    .setProperty("hibernate.connection.password", Main.bootConfig.getMYSQL_PASSWD())
+                    .setProperty("hibernate.connection.username", Main.config.getMYSQL_USR())
+                    .setProperty("hibernate.connection.password", Main.config.getMYSQL_PASSWD())
                     .setProperty("hibernate.show_sql", "true")
                     .setProperty("hibernate.c3p0.acquire_increment","1")
                     .setProperty("hibernate.c3p0.idle_test_period","100")

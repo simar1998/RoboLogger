@@ -1,7 +1,7 @@
 package com.vyo.robologger.main;
 
 import com.google.gson.Gson;
-import com.vyo.robologger.main.boot.BootConfig;
+import com.vyo.robologger.main.boot.Config;
 import com.vyo.robologger.main.db.DatabaseInit;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Main {
 
     //Public statically accessible bootConfig object
-    public static BootConfig bootConfig;
+    public static Config config;
     public static void main(String... args) throws IOException {
 
         assert args.length != 0 : "Boot Config file path argument not submitted, Can not continue!";
@@ -35,7 +35,7 @@ public class Main {
      */
     private static void bootConfigLoad(String filePath){
         Gson gson = new Gson();
-        bootConfig = gson.fromJson(Helper.fileRead(filePath),BootConfig.class).rectifyDownloadLocationStr();
+        config = gson.fromJson(Helper.fileRead(filePath), Config.class).rectifyDownloadLocationStr();
     }
 
 }

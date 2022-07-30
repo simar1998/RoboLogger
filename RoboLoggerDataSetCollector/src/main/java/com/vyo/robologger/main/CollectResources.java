@@ -26,7 +26,6 @@ public class CollectResources {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -59,6 +58,7 @@ public class CollectResources {
         fos.close();
     }
 
+    //TODO please
     /**
      * Main method that constcuts team urls and then scrapes imgur links from them and downloads and appends image file locationr refrences to mysql database
      * @throws IOException
@@ -80,7 +80,7 @@ public class CollectResources {
             linkSearch.search();
             for (String imgurLink :  linkSearch.getSearchResults()){
                 //Constructs the save file location for the image to be downloaded
-                String imageSavePath = Main.bootConfig.getDOWNLOAD_LOCATION()+links.getTeam()+"_"+ UUID.randomUUID()+".jpg";
+                String imageSavePath = Main.config.getDOWNLOAD_LOCATION()+links.getTeam()+"_"+ UUID.randomUUID()+".jpg";
                 //Saves the image from the url to the path
                 saveImageFromUrl(imgurLink,imageSavePath);
                 //Constructs the Image Data object

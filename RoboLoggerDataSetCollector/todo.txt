@@ -1,0 +1,6 @@
+TODO :
+    Trying to get years that a robot is active and building the URL from that then checking if that url exists is ineffective. I must figure out how to get the years
+    a robotics team has been active in a way that foregoes the aforementioned "URL exists check" to build a list of exact URL of each team/year subdivision to build
+    a 100% accurate list of the url.
+
+

@@ -4,16 +4,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.vyo.robologger.main.Main;
-import okhttp3.*;
 
-import org.apache.commons.validator.UrlValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +48,7 @@ public class UrlConstructor {
 
         Unirest.setTimeouts(0, 0);
         HttpResponse<String> response = Unirest.get("https://www.thebluealliance.com/api/v3/teams/all")
-                .header("X-TBA-Auth-Key", Main.bootConfig.getTBA_KEY())
+                .header("X-TBA-Auth-Key", Main.config.getTBA_KEY())
                 .asString();
 
 
