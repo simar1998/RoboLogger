@@ -12,7 +12,8 @@ class FeatureAnalysis(Enum):
 
 class KeypointAnalysis(object):
 
-    def __init__(self, video_source: str, analysis_type: FeatureAnalysis, max_frames=None, frame_extraction_mod=None):
+    def __init__(self, video_source: str, analysis_type: FeatureAnalysis, max_frames=None, frame_extraction_mod=None,
+                 write_anal_images=False):
         self.analysis_type = analysis_type
         self.video_source = video_source
         self.max_frames = max_frames
@@ -23,6 +24,18 @@ class KeypointAnalysis(object):
         self.__get_vid_fps()
         self.frames_list = []
         self.analysis_frames = []
+        self.kp = []
+        self.write_anal_images = write_anal_images  # LOL
+
+    def init_analysis(self):
+        self.__generate_frames()
+        if self.analysis_type == FeatureAnalysis.SIFT:
+            self.__sift_analysis()
+        if self.analysis_type == FeatureAnalysis.SIFT:
+            pass
+        self.__write_keypoint_data()
+        print("Video analysis done")
+        print("Moving on")
 
     def __generate_frames(self):
         vidcap = cv.VideoCapture(self.video_source)
@@ -43,23 +56,22 @@ class KeypointAnalysis(object):
         print("Video frame extraction complete!")
         vidcap.release()
 
-    def init_analysis(self):
-        self.__generate_frames()
-        if self.analysis_type == FeatureAnalysis.SIFT:
-            self.__sift_analysis()
-
     def __sift_analysis(self):
-        count = 1
+        print("Initiating SIFT analysis...")
+        count = 0
         for frame in self.frames_list:
             count = count + 1
             img = cv.imread(frame)
             gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
             sift = cv.SIFT_create()
             kp = sift.detect(gray, None)
+            self.kp.append(kp)
             img = cv.drawKeypoints(gray, kp, img)
-            path = os.path.join(self.dir_name, "analysis_frame%d.jpg" % count)
-            self.analysis_frames.append(path)
-            cv.imwrite(path, img)
+            if self.write_anal_images:
+                path = os.path.join(self.dir_name, "analysis_frame%d.jpg" % count)
+                self.analysis_frames.append(path)
+                cv.imwrite(path, img)
+        print("SIFT analysis Complete")
 
     def __get_vid_fps(self):
         video = cv.VideoCapture(self.video_source)
@@ -81,3 +93,17 @@ class KeypointAnalysis(object):
         final_directory = os.path.join(current_directory, dir_name)
         if not os.path.exists(final_directory):
             os.makedirs(final_directory)
+
+    def __write_keypoint_data(self):
+        count = 0
+        print("Writing keypoint data")
+        if self.analysis_type == FeatureAnalysis.SIFT:
+            for points in self.kp:
+                path = os.path.join(self.dir_name, str(count) + "_keypoint.txt")
+                f = open(path, "w")
+                for point in points:
+                    p = str(point.pt[0]) + "," + str(point.pt[1]) + "," + str(point.size) + "," + str(
+                        point.angle) + "," + str(
+                        point.response) + "," + str(point.octave) + "," + str(point.class_id) + "\n"
+                    f.write(p)
+                count = count + 1
